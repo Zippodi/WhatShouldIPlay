@@ -5,10 +5,21 @@ Accept: application/json
 
 ###
 
-GET {{WhatShouldIPlay.Server_HostAddress}}/api/hero/Duelist
+GET {{WhatShouldIPlay.Server_HostAddress}}/hero
 
 ###
 
-GET {{WhatShouldIPlay.Server_HostAddress}}/api/hero
+GET {{WhatShouldIPlay.Server_HostAddress}}/hero/playstyle/flank
+
+###
+
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/hero/role/Duelist
+
+###
+
+
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/hero/favorite
 
 ###

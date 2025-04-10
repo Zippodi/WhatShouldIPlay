@@ -77,7 +77,7 @@ function App() {
     );
 
     async function fetchAllHeroes() {
-        const response = await fetch('hero/Duelist');
+        const response = await fetch('hero');
         if (response.ok) {
             const data = await response.json();
             setHeroes(data);
