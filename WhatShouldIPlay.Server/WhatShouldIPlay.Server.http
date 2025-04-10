@@ -1,0 +1,14 @@
+@WhatShouldIPlay.Server_HostAddress = https://localhost:7202
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/api/hero/Duelist
+
+###
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/api/hero
+
+###
