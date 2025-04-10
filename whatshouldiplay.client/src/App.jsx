@@ -77,9 +77,10 @@ function App() {
     );
 
     async function fetchAllHeroes() {
-        const response = await fetch('hero');
+        const response = await fetch('hero/playstyle/dive');
         if (response.ok) {
             const data = await response.json();
+            console.log(data);
             setHeroes(data);
         } else {
             console.error('Failed to fetch heroes');
