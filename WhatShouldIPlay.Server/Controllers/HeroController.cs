@@ -63,8 +63,9 @@ namespace WhatShouldIPlay.Server.Controllers
             return wolverine;
         }
 
-        [HttpGet("mostPlayedHeroes/{username}")]
-        public async Task GetMostPlayedHeroes(string username)
+        //[HttpGet("mostPlayedHeroes/{username}")]
+        [HttpGet("mostPlayedHeroes/{username}/{season}")]
+        public async Task GetMostPlayedHeroes(string username, int season)
         {
 
             HttpClient client = new HttpClient();
@@ -79,7 +80,7 @@ namespace WhatShouldIPlay.Server.Controllers
             {
                 // Make a GET request
                 //HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{username}");
-                HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season=1");
+                HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season={season}");
 
                 // Ensure the response is successful
                 response.EnsureSuccessStatusCode();
