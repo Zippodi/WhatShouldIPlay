@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -77,7 +78,8 @@ namespace WhatShouldIPlay.Server.Controllers
             try
             {
                 // Make a GET request
-                HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{username}");
+                //HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{username}");
+                HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season=1");
 
                 // Ensure the response is successful
                 response.EnsureSuccessStatusCode();
@@ -95,25 +97,30 @@ namespace WhatShouldIPlay.Server.Controllers
 
                 var sortedHeroesByMatches = heroesRankedJson.OrderByDescending(number => (int)number["matches"]).ToList();
 
-                if (sortedHeroesByMatches.Count < 5)
+                if (sortedHeroesByMatches.Count < 1)
                 {
                     Console.WriteLine($"Request error: Not enough playtime");
                 }
 
-                HeroModel[] mostPlayedHeroes = [];
+                List<HeroModel> mostPlayedHeroes = new List<HeroModel>();
                 // Print out each hobby and its matches
                 foreach (var hero in sortedHeroesByMatches)
                 {
-                    string heroName = ((string)hero["hero_name"]).ToLower(); // make this lowercase too
+                    string heroName = ((string)hero["hero_name"]); // make this lowercase too
 
                     HeroModel databaseHero = context.Heroes
                         .FirstOrDefault(dbHero => dbHero.Name == heroName);
 
                     if (databaseHero != null)
                     {
-                        Console.WriteLine($"Hero: {databaseHero.Name}, Matches: {hero["matches"]}");
+                        mostPlayedHeroes.Add(databaseHero);
+
                     }
-                    //Console.WriteLine($"Hero: {heroName}, Matches: {hero["matches"]}");
+                }
+
+                foreach (var hero in mostPlayedHeroes)
+                {
+                    Console.WriteLine(hero.Name);
                 }
 
 
