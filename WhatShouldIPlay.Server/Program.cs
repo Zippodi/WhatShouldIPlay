@@ -13,6 +13,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+var apiKey = builder.Configuration["ApiSettings:ApiKey"];
+builder.Services.AddSingleton(apiKey);
 
 // Add services to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

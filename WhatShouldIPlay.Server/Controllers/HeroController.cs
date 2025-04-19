@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WhatShouldIPlay.Server.Models;
 using WhatShouldIPlay.Server.Services;
 
@@ -9,10 +12,12 @@ namespace WhatShouldIPlay.Server.Controllers
     public class HeroController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly string _apiKey;
 
-        public HeroController(ApplicationDbContext context)
+        public HeroController(ApplicationDbContext context, string apiKey)
         {
             this.context = context;
+            _apiKey = apiKey;
         }
 
 
@@ -55,6 +60,78 @@ namespace WhatShouldIPlay.Server.Controllers
                 return null;
             }
             return wolverine;
+        }
+
+        [HttpGet("mostPlayedHeroes/{username}")]
+        public async Task GetMostPlayedHeroes(string username)
+        {
+
+            HttpClient client = new HttpClient();
+
+            // Add headers globally for this client (applies to all requests)
+
+            client.DefaultRequestHeaders.Add("x-api-key", _apiKey);
+            
+
+
+            try
+            {
+                // Make a GET request
+                HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{username}");
+
+                // Ensure the response is successful
+                response.EnsureSuccessStatusCode();
+
+
+                // Read the response content
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+
+                var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
+
+                // Now assuming heroes_ranked is part of the JSON and is an array:
+                var heroesRankedJson = (JArray)jsonObject["heroes_unranked"];
+
+
+                var sortedHeroesByMatches = heroesRankedJson.OrderByDescending(number => (int)number["matches"]).ToList();
+
+                if (sortedHeroesByMatches.Count < 5)
+                {
+                    Console.WriteLine($"Request error: Not enough playtime");
+                }
+
+                HeroModel[] mostPlayedHeroes = [];
+                // Print out each hobby and its matches
+                foreach (var hero in sortedHeroesByMatches)
+                {
+                    string heroName = ((string)hero["hero_name"]).ToLower(); // make this lowercase too
+
+                    HeroModel databaseHero = context.Heroes
+                        .FirstOrDefault(dbHero => dbHero.Name == heroName);
+
+                    if (databaseHero != null)
+                    {
+                        Console.WriteLine($"Hero: {databaseHero.Name}, Matches: {hero["matches"]}");
+                    }
+                    //Console.WriteLine($"Hero: {heroName}, Matches: {hero["matches"]}");
+                }
+
+
+
+
+
+
+
+            }
+
+
+
+
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Request error: {e.Message}");
+
+            }
         }
 
         [HttpGet]
