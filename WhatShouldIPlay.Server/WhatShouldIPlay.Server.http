@@ -25,6 +25,6 @@ GET {{WhatShouldIPlay.Server_HostAddress}}/hero/favorite
 ###
 
 
-GET {{WhatShouldIPlay.Server_HostAddress}}/hero/mostPlayedHeroes/DuaLipaFan7/1
+GET {{WhatShouldIPlay.Server_HostAddress}}/hero/mostPlayedHeroes/Sypeh
 
 ###
