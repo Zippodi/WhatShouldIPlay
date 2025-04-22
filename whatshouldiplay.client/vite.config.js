@@ -55,6 +55,14 @@ export default defineConfig({
                 target,
                 secure: false,
             },
+            '^/steamgame': {
+                target,
+                secure: false,
+            },
+            '^/user': {
+                target,
+                secure: false,
+            },
         },
         port: parseInt(env.DEV_SERVER_PORT || '61354'),
         https: {
