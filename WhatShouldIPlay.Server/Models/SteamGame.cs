@@ -22,5 +22,12 @@ namespace WhatShouldIPlay.Server.Models
             get => new(Genres.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
             set => Genres = string.Join(",", value);
         }
+    
+
+    public SteamGame(int id, string name)
+        {
+            this.Id = id;
+            this.Name = name;
+        }
     }
 }

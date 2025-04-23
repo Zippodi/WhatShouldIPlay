@@ -48,6 +48,8 @@ namespace WhatShouldIPlay.Server.Controllers
             if (existingUser != null)
                 return Conflict("A user with that username already exists.");
 
+
+
             // Add and save the new user
             context.Users.Add(newUser);
             await context.SaveChangesAsync();

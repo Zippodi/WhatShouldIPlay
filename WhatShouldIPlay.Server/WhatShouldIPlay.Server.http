@@ -50,3 +50,7 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/steamgame/steamgames/76561198150694738
+
+###
