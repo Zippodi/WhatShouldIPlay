@@ -28,3 +28,25 @@ GET {{WhatShouldIPlay.Server_HostAddress}}/hero/favorite
 GET {{WhatShouldIPlay.Server_HostAddress}}/hero/mostPlayedHeroes/Sypeh
 
 ###
+
+
+GET {{WhatShouldIPlay.Server_HostAddress}}/user/currentuser/Zippodi
+
+###
+
+PUT {{WhatShouldIPlay.Server_HostAddress}}/user/updateAccessTime/Zippodi
+
+###
+
+PUT {{WhatShouldIPlay.Server_HostAddress}}/user/addMarvelRivalsUsername
+Content-Type: application/json
+
+{
+  "marvelRivalsUsername": "Zippodi2",
+  "username": "Zippodi",
+  "steamID": "76561198150694730",
+  "accessTime": "2025-04-23T00:05:36.5733327",
+  "steamGames": null
+}
+
+###
