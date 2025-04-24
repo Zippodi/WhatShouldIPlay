@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WhatShouldIPlay.Server.Models;
@@ -26,11 +27,15 @@ namespace WhatShouldIPlay.Server.Controllers
         [HttpGet("steamgames/{steamid}")]
         public async Task<IActionResult> GetAllSteamGames(string steamid)
         {
-
-            HttpClient client = new HttpClient
+            var handler = new HttpClientHandler
             {
-                Timeout = TimeSpan.FromMinutes(10) // adjust as needed
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
+
+            HttpClient client = new HttpClient(handler)
+{
+    Timeout = TimeSpan.FromMinutes(10) // adjust as needed
+};
 
             HttpResponseMessage response = await client.GetAsync($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Uri.EscapeDataString(_steamApiKey)}&steamid={Uri.EscapeDataString(steamid)}&format=json");
             response.EnsureSuccessStatusCode();
@@ -70,7 +75,7 @@ namespace WhatShouldIPlay.Server.Controllers
                     continue;
 
                 var newGame = new SteamGame(int.Parse(appId), name);
-                
+
                 games.Add(newGame);
 
                 // Save to DB here
