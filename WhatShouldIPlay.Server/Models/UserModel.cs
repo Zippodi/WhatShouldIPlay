@@ -10,9 +10,11 @@
 
         public string? SteamID { get; set; }
 
-        public DateTime? AccessTime { get; set; }
+        public DateTime? SteamAccessTime { get; set; }
+
+        public DateTime? MarvelRivalsAccessTime { get; set; }
 
         // Navigation property to list of games
-        public ICollection<SteamGame>? SteamGames { get; set; }
+        //public ICollection<SteamGame>? SteamGames { get; set; }
     }
 }

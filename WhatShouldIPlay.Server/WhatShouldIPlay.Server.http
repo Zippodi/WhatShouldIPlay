@@ -54,3 +54,14 @@ Content-Type: application/json
 GET {{WhatShouldIPlay.Server_HostAddress}}/steamgame/steamgames/76561198150694738
 
 ###
+
+POST {{WhatShouldIPlay.Server_HostAddress}}/user/register
+Content-Type: application/json
+
+{
+  "marvelRivalsUsername": "Zippodi",
+  "username": "Zippodi",
+  "steamID": "76561198150694738"
+}
+
+###

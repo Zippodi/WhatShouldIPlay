@@ -125,7 +125,7 @@ namespace WhatShouldIPlay.Server.Controllers
                 return NotFound($"User '{username}' not found.");
 
             // Update the Steam ID
-            existingUser.AccessTime = DateTime.UtcNow;
+            existingUser.MarvelRivalsAccessTime = DateTime.UtcNow;
 
 
             await context.SaveChangesAsync();
