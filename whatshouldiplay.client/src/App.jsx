@@ -64,7 +64,7 @@ function App() {
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
         : <ul>
             {heroes.map(hero =>
-                <li key={hero.id}>{hero.name} ({hero.role})</li>
+                <li key={hero.id}> {hero.name} </li>
             )}
         </ul>;
 
@@ -77,7 +77,7 @@ function App() {
     );
 
     async function fetchAllHeroes() {
-        const response = await fetch('hero/playstyle/dive');
+        const response = await fetch('steamgame/steamgames/76561198150694738?useSteam=true');
         if (response.ok) {
             const data = await response.json();
             console.log(data);

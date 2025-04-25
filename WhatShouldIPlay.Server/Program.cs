@@ -13,10 +13,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-var apiKey = builder.Configuration["ApiSettings:ApiKey"];
-var steamApiKey = builder.Configuration["ApiSettings:SteamApiKey"];
-builder.Services.AddSingleton(apiKey);
-builder.Services.AddSingleton(steamApiKey);
+//var apiKey = builder.Configuration["ApiSettings:ApiKey"];
+//var steamApiKey = builder.Configuration["ApiSettings:SteamApiKey"];
+//builder.Services.AddSingleton(apiKey);
+//builder.Services.AddSingleton(steamApiKey);
+var apiSettings = builder.Configuration.GetSection("ApiSettings")
+    .Get<Dictionary<string, string>>();
+
+builder.Services.AddSingleton(apiSettings);
+
+
 
 // Add services to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

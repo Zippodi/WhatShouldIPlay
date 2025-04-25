@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Azure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WhatShouldIPlay.Server.Models;
@@ -13,12 +14,13 @@ namespace WhatShouldIPlay.Server.Controllers
     public class HeroController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-        private readonly string _apiKey;
+        private readonly Dictionary<string, string> _apiSettings;
 
-        public HeroController(ApplicationDbContext context, string apiKey)
+        public HeroController(ApplicationDbContext context, Dictionary<string, string> apiSettings)
         {
             this.context = context;
-            _apiKey = apiKey;
+            _apiSettings = apiSettings;
+
         }
 
 
@@ -67,12 +69,13 @@ namespace WhatShouldIPlay.Server.Controllers
         [HttpGet("mostPlayedHeroes/{username}")]
         public async Task<List<HeroModel>> GetMostPlayedHeroes(string username)
         {
+            Console.WriteLine($"Method triggered for username: {username}");
 
             HttpClient client = new HttpClient();
 
             // Add headers globally for this client (applies to all requests)
-
-            client.DefaultRequestHeaders.Add("x-api-key", _apiKey);
+            Console.WriteLine(_apiSettings["ApiKey"]);
+            client.DefaultRequestHeaders.Add("x-api-key", _apiSettings["ApiKey"]);
 
 
 
@@ -90,7 +93,10 @@ namespace WhatShouldIPlay.Server.Controllers
                 // Read the response content
                 string responseBody = await response.Content.ReadAsStringAsync();
                 string responseBody2 = await response2.Content.ReadAsStringAsync();
-
+                Console.WriteLine($"Status code: {response.StatusCode}");
+                Console.WriteLine($"Headers: {response.Headers}"); 
+                Console.WriteLine($"Status code: {response2.StatusCode}");
+                Console.WriteLine($"Headers: {response2.Headers}");
 
 
                 var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
@@ -178,7 +184,7 @@ namespace WhatShouldIPlay.Server.Controllers
 
             // Add headers globally for this client (applies to all requests)
 
-            client.DefaultRequestHeaders.Add("x-api-key", _apiKey);
+            client.DefaultRequestHeaders.Add("x-api-key", _apiSettings["ApiKey"]);
             
 
 

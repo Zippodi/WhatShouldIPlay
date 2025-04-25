@@ -13,12 +13,13 @@ namespace WhatShouldIPlay.Server.Controllers
     public class SteamGameController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-        private readonly string _steamApiKey;
+        private readonly Dictionary<string, string> _apiSettings;
 
-        public SteamGameController(ApplicationDbContext context, String steamApiKey)
+        public SteamGameController(ApplicationDbContext context, Dictionary<string, string> apiSettings)
         {
             this.context = context;
-            this._steamApiKey = steamApiKey;
+            _apiSettings = apiSettings;
+
 
         }
 
@@ -51,7 +52,7 @@ namespace WhatShouldIPlay.Server.Controllers
                     Timeout = TimeSpan.FromMinutes(10) // adjust as needed
                 };
 
-                HttpResponseMessage response = await client.GetAsync($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Uri.EscapeDataString(_steamApiKey)}&steamid={Uri.EscapeDataString(steamid)}&format=json");
+                HttpResponseMessage response = await client.GetAsync($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Uri.EscapeDataString(_apiSettings["SteamApiKey"])}&steamid={Uri.EscapeDataString(steamid)}&format=json");
                 response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
