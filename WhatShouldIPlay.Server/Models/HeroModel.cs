@@ -21,7 +21,5 @@ namespace WhatShouldIPlay.Server.Models
 
         public string? Role { get; set; }
         public int ImageId { get; set; }
-        public bool IsFavorite { get; set; }
-        public int Rank { get; set; }
     }
 }

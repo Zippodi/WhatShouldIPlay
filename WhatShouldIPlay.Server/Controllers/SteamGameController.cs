@@ -52,7 +52,7 @@ namespace WhatShouldIPlay.Server.Controllers
                     Timeout = TimeSpan.FromMinutes(10) // adjust as needed
                 };
 
-                HttpResponseMessage response = await client.GetAsync($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Uri.EscapeDataString(_apiSettings["SteamApiKey"])}&steamid={Uri.EscapeDataString(steamid)}&format=json");
+                HttpResponseMessage response = await client.GetAsync($"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={Uri.EscapeDataString(_apiSettings["SteamApiKey"])}&include_appinfo=1&steamid={Uri.EscapeDataString(steamid)}&format=json");
                 response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -92,7 +92,7 @@ namespace WhatShouldIPlay.Server.Controllers
                     {
                         recentPlaytime = game["playtime_2weeks"].ToString();
                     }
-                    var newGame = new SteamGame(appId, name, genres, recentPlaytime, game["playtime_forever"].ToString(), steamid);
+                    var newGame = new SteamGame(appId, name, genres, recentPlaytime, game["playtime_forever"].ToString(), steamid, game["img_icon_url"].ToString());
 
                     games.Add(newGame);
 

@@ -60,13 +60,49 @@ function App() {
         fetchAllHeroes();
     }, []);
 
+    //const contents = heroes.length === 0
+    //    ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
+    //    : <ul>
+    //        {heroes.map(hero =>
+
+    //            <li key={hero.id}>
+    //                <img src={`https://media.steampowered.com/steamcommunity/public/images/apps/${hero.SteamID}/${hero.imageIconHash}.jpg`} alt="icon" />
+    //                <img
+    //                    src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${hero.SteamID}/header.jpg`}
+    //                    onError={(e) => { e.target.src = '/assets/react.svg'; }}
+    //                    alt="Game Header"
+    //                />
+
+    //                {hero.name}
+    //            </li>
+    //        )}
+    //    </ul>;
+
     const contents = heroes.length === 0
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
         : <ul>
             {heroes.map(hero =>
-                <li key={hero.id}> {hero.name} </li>
+                <li key={hero.id}>
+                    {/* Icon image */}
+                    <img
+                        src={`https://media.steampowered.com/steamcommunity/public/images/apps/${hero.steamID}/${hero.imageIconHash}.jpg`}
+                        alt="icon"
+                    />
+
+                    {/* Header image with fallback */}
+                    <img
+                        src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${hero.steamID}/header.jpg`}
+                        onError={(e) => {
+                            console.log('Error loading header image:', e.target.src);
+                        }}
+                        alt="Game Header"
+                    />
+
+                    {hero.name}
+                </li>
             )}
         </ul>;
+
 
     return (
         <div>
@@ -77,7 +113,7 @@ function App() {
     );
 
     async function fetchAllHeroes() {
-        const response = await fetch('steamgame/steamgames/76561198150694738?useSteam=true');
+        const response = await fetch('steamgame/steamgames/76561198150694738');
         if (response.ok) {
             const data = await response.json();
             console.log(data);

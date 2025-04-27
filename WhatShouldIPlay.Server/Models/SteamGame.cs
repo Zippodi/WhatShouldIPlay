@@ -13,6 +13,10 @@ public class SteamGame
     public int totalPlayime { get; set; }
     public string Genres { get; set; } = string.Empty;
     public string UserSteamId { get; set; }
+    public string? imageIconHash { get; set; }
+   
+    
+
 
     [NotMapped]
     public List<string> GenresArray
@@ -24,7 +28,7 @@ public class SteamGame
     // Required by EF
     public SteamGame() { }
 
-    public SteamGame(string steamid, string? name, List<string> genresArray, string? recentPlaytime, string? totalPlayime, string userSteamId)
+    public SteamGame(string steamid, string? name, List<string> genresArray, string? recentPlaytime, string? totalPlayime, string userSteamId, string imageiconhash)
     {
         SteamID = steamid;
         Name = name;
@@ -32,5 +36,6 @@ public class SteamGame
         this.recentPlaytime = int.Parse(recentPlaytime);
         this.totalPlayime = int.Parse(totalPlayime);
         UserSteamId = userSteamId;
+        this.imageIconHash = imageiconhash;
     }
 }

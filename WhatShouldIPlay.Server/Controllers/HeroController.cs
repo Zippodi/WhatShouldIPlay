@@ -46,12 +46,12 @@ namespace WhatShouldIPlay.Server.Controllers
             return filteredHeroes;
         }
 
-        [HttpGet("favorite")]
-        public HeroModel[] GetFavoriteHeroes()
-        {
-            HeroModel[] heroes = context.Heroes.Where(i => i.IsFavorite).ToArray();
-            return heroes;
-        }
+        //[HttpGet("favorite")]
+        //public HeroModel[] GetFavoriteHeroes()
+        //{
+        //    HeroModel[] heroes = context.Heroes.Where(i => i.IsFavorite).ToArray();
+        //    return heroes;
+        //}
 
         [HttpGet("Wolverine")]
         public HeroModel GetWolverine()
