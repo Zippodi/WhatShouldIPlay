@@ -9,13 +9,17 @@ using WhatShouldIPlay.Server.Services;
 
 namespace WhatShouldIPlay.Server.Controllers
 {
+    //Contains Endpoints for the HeroModel class. Interacts with the database to 
+    //retrieve HeroModels with certain parameters.
     [ApiController]
     [Route("[controller]")]
     public class HeroController : ControllerBase
     {
+
         private readonly ApplicationDbContext context;
         private readonly Dictionary<string, string> _apiSettings;
-
+        
+        //Constructs the HeroController with the database context and the list of apikeys
         public HeroController(ApplicationDbContext context, Dictionary<string, string> apiSettings)
         {
             this.context = context;
@@ -25,7 +29,7 @@ namespace WhatShouldIPlay.Server.Controllers
 
 
 
-
+        //Gets the heroes of the given role
         [HttpGet("role/{role}")]
         public HeroModel[] GetHeroesByRole(string role)
         {
@@ -33,6 +37,7 @@ namespace WhatShouldIPlay.Server.Controllers
             return heroes;
         }
 
+        //Gets all heroes of the given playstyle
         [HttpGet("playstyle/{playstyle}")]
         public HeroModel[] GetHeroesByPlaystyle(string playstyle)
         {
@@ -46,13 +51,8 @@ namespace WhatShouldIPlay.Server.Controllers
             return filteredHeroes;
         }
 
-        //[HttpGet("favorite")]
-        //public HeroModel[] GetFavoriteHeroes()
-        //{
-        //    HeroModel[] heroes = context.Heroes.Where(i => i.IsFavorite).ToArray();
-        //    return heroes;
-        //}
-
+        
+        //Returns the Wolverine HeroModel
         [HttpGet("Wolverine")]
         public HeroModel GetWolverine()
         {
@@ -65,112 +65,159 @@ namespace WhatShouldIPlay.Server.Controllers
             return wolverine;
         }
 
-
+        //Get's the user with the given username's heroes, and orders them by playtime.
         [HttpGet("mostPlayedHeroes/{username}")]
         public async Task<List<HeroModel>> GetMostPlayedHeroes(string username)
         {
-            Console.WriteLine($"Method triggered for username: {username}");
-
-            HttpClient client = new HttpClient();
-
-            // Add headers globally for this client (applies to all requests)
-            Console.WriteLine(_apiSettings["ApiKey"]);
-            client.DefaultRequestHeaders.Add("x-api-key", _apiSettings["ApiKey"]);
-
-
-
-            try
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            if (!string.IsNullOrEmpty(user.MarvelRivalsUsername) && user.MarvelRivalsAccessTime?.AddDays(3) >= DateTime.UtcNow)
             {
-                // Make a GET request
-                HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season={1}");
-                HttpResponseMessage response2 = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season={2}");
-
-                // Ensure the response is successful
-                response.EnsureSuccessStatusCode();
-                response2.EnsureSuccessStatusCode();
-
-
-                // Read the response content
-                string responseBody = await response.Content.ReadAsStringAsync();
-                string responseBody2 = await response2.Content.ReadAsStringAsync();
-                Console.WriteLine($"Status code: {response.StatusCode}");
-                Console.WriteLine($"Headers: {response.Headers}"); 
-                Console.WriteLine($"Status code: {response2.StatusCode}");
-                Console.WriteLine($"Headers: {response2.Headers}");
-
-
-                var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
-                var jsonObject2 = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody2);
-
-
-                // Now assuming heroes_ranked is part of the JSON and is an array:
-                var unrankedArray = (JArray)jsonObject["heroes_unranked"];
-                var rankedArray = (JArray)jsonObject["heroes_ranked"];
-
-                var unrankedArray2 = (JArray)jsonObject2["heroes_unranked"];
-                var rankedArray2 = (JArray)jsonObject2["heroes_ranked"];
-
-                var season1Array = unrankedArray.Concat(rankedArray);
-                var season2Array = unrankedArray2.Concat(rankedArray2);
-
-                var combinedArray = season1Array.Concat(season2Array);
-
-
-
-
-                var sortedHeroesByMatches = combinedArray
-               .GroupBy(hero => hero["hero_name"]?.ToString())
-               .Select(group =>
-               {
-                   // Pick any instance (e.g., first) and modify its matches field
-                   var heroObj = (JObject)group.First().DeepClone();
-                   heroObj["matches"] = group.Sum(h => (int)h["matches"]);
-                   return heroObj;
-               })
-               .OrderByDescending(h => (int)h["matches"])
-               .ToList();
-
-                if (sortedHeroesByMatches.Count < 1)
-                {
-                    Console.WriteLine($"Request error: Not enough playtime");
-                }
-
+                var playedHeroesStats = await context.HeroStats
+                    .Where(hs => hs.Username == username)
+                    .Include(hs => hs.hero)
+                    .OrderByDescending(hs => hs.HeroPlaytime)
+                    .ToListAsync();
                 List<HeroModel> mostPlayedHeroes = new List<HeroModel>();
-
-                foreach (var hero in sortedHeroesByMatches)
+                foreach (var herostats in playedHeroesStats)
                 {
-                    string heroName = ((string)hero["hero_name"]);
-
-                    HeroModel databaseHero = context.Heroes
-                        .FirstOrDefault(dbHero => dbHero.Name == heroName);
-
-                    if (databaseHero != null)
-                    {
-                        mostPlayedHeroes.Add(databaseHero);
-
-                    }
+                    mostPlayedHeroes.Add(herostats.hero);
                 }
-
-                foreach (var hero in mostPlayedHeroes)
-                {
-                    Console.WriteLine(hero.Name);
-                }
-
-
-
-
                 return mostPlayedHeroes;
-
-
             }
-
-
-
-
-            catch (HttpRequestException e)
+            else
             {
-                Console.WriteLine($"Request error: {e.Message}");
-                return null;
+
+                HttpClient client = new HttpClient();
+
+                // Add headers globally for this client (applies to all requests)
+                Console.WriteLine(_apiSettings["ApiKey"]);
+                client.DefaultRequestHeaders.Add("x-api-key", _apiSettings["ApiKey"]);
+
+
+
+                try
+                {
+                    // Make a GET request
+                    HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season={1}");
+                    HttpResponseMessage response2 = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season={2}");
+
+                    // Ensure the response is successful
+                    response.EnsureSuccessStatusCode();
+                    response2.EnsureSuccessStatusCode();
+
+
+                    // Read the response content
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    string responseBody2 = await response2.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Status code: {response.StatusCode}");
+                    Console.WriteLine($"Headers: {response.Headers}");
+                    Console.WriteLine($"Status code: {response2.StatusCode}");
+                    Console.WriteLine($"Headers: {response2.Headers}");
+
+
+                    var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody);
+                    var jsonObject2 = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseBody2);
+
+
+                    // Now assuming heroes_ranked is part of the JSON and is an array:
+                    var unrankedArray = (JArray)jsonObject["heroes_unranked"];
+                    var rankedArray = (JArray)jsonObject["heroes_ranked"];
+
+                    var unrankedArray2 = (JArray)jsonObject2["heroes_unranked"];
+                    var rankedArray2 = (JArray)jsonObject2["heroes_ranked"];
+
+                    var season1Array = unrankedArray.Concat(rankedArray);
+                    var season2Array = unrankedArray2.Concat(rankedArray2);
+
+                    var combinedArray = season1Array.Concat(season2Array);
+
+
+
+
+                    var sortedHeroesByMatches = combinedArray
+                   .GroupBy(hero => hero["hero_name"]?.ToString())
+                   .Select(group =>
+                   {
+                       // Pick any instance (e.g., first) and modify its matches field
+                       var heroObj = (JObject)group.First().DeepClone();
+                       heroObj["matches"] = group.Sum(h => (int)h["matches"]);
+                       return heroObj;
+                   })
+                   .OrderByDescending(h => (int)h["matches"])
+                   .ToList();
+
+                    if (sortedHeroesByMatches.Count < 1)
+                    {
+                        Console.WriteLine($"Request error: Not enough playtime");
+                    }
+
+                    List<HeroModel> mostPlayedHeroes = new List<HeroModel>();
+
+                    foreach (var hero in sortedHeroesByMatches)
+                    {
+                        string heroName = ((string)hero["hero_name"]);
+
+                        HeroModel databaseHero = context.Heroes
+                            .FirstOrDefault(dbHero => dbHero.Name == heroName);
+
+                        if (databaseHero != null)
+                        {
+                            mostPlayedHeroes.Add(databaseHero);
+                            int newPlaytime = (int)hero["matches"];
+
+                            var existingStat = await context.HeroStats
+                                .FirstOrDefaultAsync(hs => hs.Username == username && hs.HeroName == databaseHero.Name);
+
+                            if (existingStat != null)
+                            {
+                                // Update playtime
+                                existingStat.HeroPlaytime = newPlaytime;
+                            }
+                            else
+                            {
+                                // Insert new stat
+                                var newStat = new HeroStatsModel
+                                {
+                                    Username = username,
+                                    HeroName = databaseHero.Name,
+                                    HeroPlaytime = newPlaytime,
+                                    HeroId = databaseHero.Id
+                                };
+                                context.HeroStats.Add(newStat);
+                            }
+                            //var newStat = new HeroStatsModel
+                            //{
+                            //    Username = username,
+                            //    HeroName = databaseHero.Name,
+                            //    HeroPlaytime = (int)hero["matches"]
+                            //};
+                            //context.HeroStats.Add(newStat);
+                        }
+                    }
+
+                    //foreach (var hero in mostPlayedHeroes)
+                    //{
+
+
+                    //    Console.WriteLine(hero.Name);
+                    //}
+
+                    user.MarvelRivalsAccessTime = DateTime.UtcNow;
+
+                    await context.SaveChangesAsync();
+                    return mostPlayedHeroes;
+
+
+                }
+
+
+
+
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                    return null;
+                }
             }
         }
 
@@ -267,7 +314,7 @@ namespace WhatShouldIPlay.Server.Controllers
                 return null;
             }
         }
-
+        //Retrieves all heroes in the database.
         [HttpGet]
         public HeroModel[] GetAllHeroes()
         {

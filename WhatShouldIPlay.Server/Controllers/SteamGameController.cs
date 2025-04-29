@@ -8,6 +8,7 @@ using WhatShouldIPlay.Server.Services;
 
 namespace WhatShouldIPlay.Server.Controllers
 {
+    //Contains endpoint for the SteamGame class. Only retrieves all of the user's own games
     [ApiController]
     [Route("[controller]")]
     public class SteamGameController : ControllerBase
@@ -15,6 +16,7 @@ namespace WhatShouldIPlay.Server.Controllers
         private readonly ApplicationDbContext context;
         private readonly Dictionary<string, string> _apiSettings;
 
+        //Constructs the SteamGameController with the database context and api keys list
         public SteamGameController(ApplicationDbContext context, Dictionary<string, string> apiSettings)
         {
             this.context = context;
@@ -25,7 +27,8 @@ namespace WhatShouldIPlay.Server.Controllers
 
 
 
-
+        //Retrieves all of the user's owned steam games, ordered by playtime and 
+        //containing the games genres and images.
         [HttpGet("steamgames/{steamid}")]
         public async Task<IActionResult> GetAllSteamGames(string steamid, bool useSteam)
         {
@@ -34,7 +37,7 @@ namespace WhatShouldIPlay.Server.Controllers
             var games = new List<SteamGame>();
 
 
-            if (user.SteamAccessTime?.AddDays(7) < DateTime.UtcNow)
+            if (string.IsNullOrEmpty(user.SteamAccessTime.ToString()) || user.SteamAccessTime?.AddDays(7) < DateTime.UtcNow)
             {
                 useSteam = true;
             }

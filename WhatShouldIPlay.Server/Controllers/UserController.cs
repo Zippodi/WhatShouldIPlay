@@ -7,13 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WhatShouldIPlay.Server.Controllers
 {
+    //Contains endpoints for getting, creating and editing users from the database.
+    //There is no passwords because all information is public.
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext context;
 
-
+        //Constructs the controller with the database context
         public UserController(ApplicationDbContext context)
         {
             this.context = context;
@@ -22,7 +24,7 @@ namespace WhatShouldIPlay.Server.Controllers
 
 
 
-
+        //Retrieves the current user with the given username
         [HttpGet("currentuser/{username}")]
         public ActionResult<UserModel> GetCurrentUser(string username)
         {
@@ -34,7 +36,7 @@ namespace WhatShouldIPlay.Server.Controllers
         }
 
 
-
+        //Registers the given user in the database
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserModel newUser)
         {
@@ -57,6 +59,7 @@ namespace WhatShouldIPlay.Server.Controllers
             return CreatedAtAction(nameof(GetCurrentUser), new { username = newUser.Username }, newUser);
         }
 
+        //Updates the User with the steamID
         [HttpPut("addSteam")]
         public async Task<IActionResult> AddSteamID([FromBody] UserModel newUser)
         {
@@ -85,7 +88,7 @@ namespace WhatShouldIPlay.Server.Controllers
 
         }
 
-
+        //Updates the user with the given MarvelRivals username
         [HttpPut("addMarvelRivalsUsername")]
         public async Task<IActionResult> AddMarvelRivalsUsername([FromBody] UserModel newUser)
         {
@@ -111,6 +114,7 @@ namespace WhatShouldIPlay.Server.Controllers
 
         }
 
+        //Updates the user's marvel rivals access time
         [HttpPut("updateAccessTime/{username}")]
         public async Task<IActionResult> updateAccessTime(string username)
         {
@@ -124,7 +128,6 @@ namespace WhatShouldIPlay.Server.Controllers
             if (existingUser == null)
                 return NotFound($"User '{username}' not found.");
 
-            // Update the Steam ID
             existingUser.MarvelRivalsAccessTime = DateTime.UtcNow;
 
 

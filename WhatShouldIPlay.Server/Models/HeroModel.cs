@@ -2,13 +2,15 @@
 
 namespace WhatShouldIPlay.Server.Models
 {
-
+    //Class for representing a hero in Marvel Rivals
     public class HeroModel
     {
+        //Id for hero
         public int Id { get; set; }
+        //Name of the hero
         public string? Name { get; set; }
 
-        // This is the column that already exists in your database (as CSV)
+        // CSV String of the player's playstyles
         public string Playstyles { get; set; } = string.Empty;
 
         // Computed property that converts the CSV string to an array
@@ -19,7 +21,9 @@ namespace WhatShouldIPlay.Server.Models
             set => Playstyles = string.Join(",", value);
         }
 
+        //Role of the hero
         public string? Role { get; set; }
+        //Id of the Hero's image
         public int ImageId { get; set; }
     }
 }

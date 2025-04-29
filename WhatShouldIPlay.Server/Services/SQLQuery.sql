@@ -1,0 +1,45 @@
+﻿SET IDENTITY_INSERT Heroes ON;
+
+INSERT INTO Heroes (Id, Name, Role, ImageId, Playstyles)
+VALUES
+(1, 'Captain America', 'Vanguard', 1, 'dive,peel'),
+(2, 'Doctor Strange', 'Vanguard', 2, 'shield,poke'),
+(3, 'Emma Frost', 'Vanguard', 3, 'pressure,control'),
+(4, 'Groot', 'Vanguard', 4, 'shield,control'),
+(5, 'Hulk', 'Vanguard', 5, 'dive,peel'),
+(6, 'Magneto', 'Vanguard', 6, 'shield,poke'),
+(7, 'Peni Parker', 'Vanguard', 7, 'control'),
+(8, 'The Thing', 'Vanguard', 8, 'dive,peel'),
+(9, 'Thor', 'Vanguard', 9, 'pressure,peel'),
+(10, 'Venom', 'Vanguard', 10, 'dive,pressure'),
+
+(11, 'Black Panther', 'Duelist', 11, 'dive,peel,flank'),
+(12, 'Black Widow', 'Duelist', 12, 'poke,sniper'),
+(13, 'Hawkeye', 'Duelist', 13, 'poke,peel,sniper'),
+(14, 'Hela', 'Duelist', 14, 'poke,peel'),
+(15, 'Iron Fist', 'Duelist', 15, 'dive,peel,flank'),
+(16, 'Iron Man', 'Duelist', 16, 'control,poke'),
+(17, 'Human Torch', 'Duelist', 17, 'control,poke'),
+(18, 'Magik', 'Duelist', 18, 'pressure,dive,flank'),
+(19, 'Mr Fantastic', 'Duelist', 19, 'pressure,peel'),
+(20, 'Moon Knight', 'Duelist', 20, 'control,pressure'),
+(21, 'Namor', 'Duelist', 21, 'control,peel'),
+(22, 'Psylocke', 'Duelist', 22, 'dive,poke,flank'),
+(23, 'Scarlet Witch', 'Duelist', 23, 'pressure,peel'),
+(24, 'Spider-Man', 'Duelist', 24, 'dive,flank'),
+(25, 'Squirrel Girl', 'Duelist', 25, 'pressure,control'),
+(26, 'Star-Lord', 'Duelist', 26, 'pressure,peel'),
+(27, 'Storm', 'Duelist', 27, 'peel,buff'),
+(28, 'The Punisher', 'Duelist', 28, 'control,pressure'),
+(29, 'Winter Soldier', 'Duelist', 29, 'pressure'),
+(30, 'Wolverine', 'Duelist', 30, 'pressure,peel'),
+
+(31, 'Adam Warlock', 'Strategist', 31, 'heal,poke'),
+(32, 'Cloak and Dagger', 'Strategist', 32, 'heal,pressure'),
+(33, 'Invisible Woman', 'Strategist', 33, 'heal,shield'),
+(34, 'Jeff the Land Shark', 'Strategist', 34, 'heal'),
+(35, 'Loki', 'Strategist', 35, 'heal,control'),
+(36, 'Luna Snow', 'Strategist', 36, 'heal,poke'),
+(37, 'Mantis', 'Strategist', 37, 'heal,dive'),
+(38, 'Rocket Raccoon', 'Strategist', 38, 'heal,peel');
+SET IDENTITY_INSERT Heroes OFF;

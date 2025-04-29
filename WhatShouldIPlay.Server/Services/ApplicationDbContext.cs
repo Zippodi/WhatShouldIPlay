@@ -14,5 +14,7 @@ namespace WhatShouldIPlay.Server.Services
         public required DbSet<SteamGame> SteamGames { get; set; }
 
         public required DbSet<UserModel> Users { get; set; }
+
+        public required DbSet<HeroStatsModel> HeroStats { get; set; }
     }
 }

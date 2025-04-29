@@ -81,27 +81,35 @@ function App() {
     const contents = heroes.length === 0
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
         : <ul>
+            
             {heroes.map(hero =>
                 <li key={hero.id}>
-                    {/* Icon image */}
-                    <img
-                        src={`https://media.steampowered.com/steamcommunity/public/images/apps/${hero.steamID}/${hero.imageIconHash}.jpg`}
-                        alt="icon"
-                    />
-
-                    {/* Header image with fallback */}
-                    <img
-                        src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${hero.steamID}/header.jpg`}
-                        onError={(e) => {
-                            console.log('Error loading header image:', e.target.src);
-                        }}
-                        alt="Game Header"
-                    />
-
+                    
                     {hero.name}
                 </li>
             )}
         </ul>;
+        {/*    {heroes.map(hero =>*/}
+        {/*        <li key={hero.id}>*/}
+        {/*            */}{/* Icon image */}
+        {/*            <img*/}
+        {/*                src={`https://media.steampowered.com/steamcommunity/public/images/apps/${hero.steamID}/${hero.imageIconHash}.jpg`}*/}
+        {/*                alt="icon"*/}
+        {/*            />*/}
+
+        {/*            */}{/* Header image with fallback */}
+        {/*            <img*/}
+        {/*                src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${hero.steamID}/header.jpg`}*/}
+        {/*                onError={(e) => {*/}
+        {/*                    console.log('Error loading header image:', e.target.src);*/}
+        {/*                }}*/}
+        {/*                alt="Game Header"*/}
+        {/*            />*/}
+
+        {/*            {hero.name}*/}
+        {/*        </li>*/}
+        {/*    )}*/}
+        {/*</ul>;*/}
 
 
     return (
@@ -113,7 +121,7 @@ function App() {
     );
 
     async function fetchAllHeroes() {
-        const response = await fetch('steamgame/steamgames/76561198150694738');
+        const response = await fetch('hero/role/Duelist');
         if (response.ok) {
             const data = await response.json();
             console.log(data);
