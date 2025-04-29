@@ -121,7 +121,7 @@ function App() {
     );
 
     async function fetchAllHeroes() {
-        const response = await fetch('hero/role/Duelist');
+        const response = await fetch('hero/mostPlayedHeroes/Zippodi');
         if (response.ok) {
             const data = await response.json();
             console.log(data);

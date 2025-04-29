@@ -67,10 +67,10 @@ namespace WhatShouldIPlay.Server.Controllers
 
         //Get's the user with the given username's heroes, and orders them by playtime.
         [HttpGet("mostPlayedHeroes/{username}")]
-        public async Task<List<HeroModel>> GetMostPlayedHeroes(string username)
+        public async Task<List<HeroModel>> GetMostPlayedHeroes(string username, bool useMR)
         {
             var user = await context.Users.FirstOrDefaultAsync(x => x.Username == username);
-            if (!string.IsNullOrEmpty(user.MarvelRivalsUsername) && user.MarvelRivalsAccessTime?.AddDays(3) >= DateTime.UtcNow)
+            if (!string.IsNullOrEmpty(user.MarvelRivalsUsername) && user.MarvelRivalsAccessTime?.AddDays(3) >= DateTime.UtcNow && !useMR)
             {
                 var playedHeroesStats = await context.HeroStats
                     .Where(hs => hs.Username == username)
@@ -90,7 +90,6 @@ namespace WhatShouldIPlay.Server.Controllers
                 HttpClient client = new HttpClient();
 
                 // Add headers globally for this client (applies to all requests)
-                Console.WriteLine(_apiSettings["ApiKey"]);
                 client.DefaultRequestHeaders.Add("x-api-key", _apiSettings["ApiKey"]);
 
 
@@ -238,7 +237,6 @@ namespace WhatShouldIPlay.Server.Controllers
             try
             {
                 // Make a GET request
-                //HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{username}");
                 HttpResponseMessage response = await client.GetAsync($"https://marvelrivalsapi.com/api/v1/player/{Uri.EscapeDataString(username)}?season={season}");
 
                 // Ensure the response is successful
