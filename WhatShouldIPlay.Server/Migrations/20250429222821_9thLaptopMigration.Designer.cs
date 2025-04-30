@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhatShouldIPlay.Server.Services;
 
@@ -11,9 +12,11 @@ using WhatShouldIPlay.Server.Services;
 namespace WhatShouldIPlay.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429222821_9thLaptopMigration")]
+    partial class _9thLaptopMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +96,6 @@ namespace WhatShouldIPlay.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("HeroId")
-                        .HasColumnType("int");
-
                     b.Property<string>("HeroName")
                         .HasColumnType("nvarchar(max)");
 
@@ -105,12 +105,15 @@ namespace WhatShouldIPlay.Server.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("heroId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HeroId");
+                    b.HasIndex("heroId");
 
                     b.HasIndex("userId");
 
@@ -149,9 +152,7 @@ namespace WhatShouldIPlay.Server.Migrations
                 {
                     b.HasOne("WhatShouldIPlay.Server.Models.HeroModel", "hero")
                         .WithMany()
-                        .HasForeignKey("HeroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("heroId");
 
                     b.HasOne("WhatShouldIPlay.Server.Models.UserModel", "user")
                         .WithMany()

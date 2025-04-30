@@ -63,7 +63,7 @@ function App() {
 
     return (
         <div>
-            <h1>Hero List</h1>
+            <h1 class="text-3xl font-bold underline">Hero List</h1>
             <p><Link to="/steam">Go to Steam Page</Link></p>
             <p><Link to="/marvelrivals">Go to Marvel Rivals Page</Link></p>
             <p>This component demonstrates fetching data from the server.</p>

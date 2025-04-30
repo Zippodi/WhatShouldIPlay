@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhatShouldIPlay.Server.Services;
 
@@ -11,9 +12,11 @@ using WhatShouldIPlay.Server.Services;
 namespace WhatShouldIPlay.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427005204_7thLaptopMigration")]
+    partial class _7thLaptopMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,38 +88,6 @@ namespace WhatShouldIPlay.Server.Migrations
                     b.ToTable("Heroes");
                 });
 
-            modelBuilder.Entity("WhatShouldIPlay.Server.Models.HeroStatsModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("HeroId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HeroName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("HeroPlaytime")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HeroId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("HeroStats");
-                });
-
             modelBuilder.Entity("WhatShouldIPlay.Server.Models.UserModel", b =>
                 {
                     b.Property<int>("Id")
@@ -143,23 +114,6 @@ namespace WhatShouldIPlay.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WhatShouldIPlay.Server.Models.HeroStatsModel", b =>
-                {
-                    b.HasOne("WhatShouldIPlay.Server.Models.HeroModel", "hero")
-                        .WithMany()
-                        .HasForeignKey("HeroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WhatShouldIPlay.Server.Models.UserModel", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
-                    b.Navigation("hero");
-
-                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }
