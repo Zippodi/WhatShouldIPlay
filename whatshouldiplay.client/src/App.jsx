@@ -1,86 +1,60 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import './App.css';
-
+import Header from './Components/Header';
+import FadingImages from './Components/FadingImages';
 function App() {
-    const [heroes, setHeroes] = useState([]);
-
-    useEffect(() => {
-        fetchAllHeroes();
-    }, []);
-
-    //const contents = heroes.length === 0
-    //    ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
-    //    : <ul>
-    //        {heroes.map(hero =>
-
-    //            <li key={hero.id}>
-    //                <img src={`https://media.steampowered.com/steamcommunity/public/images/apps/${hero.SteamID}/${hero.imageIconHash}.jpg`} alt="icon" />
-    //                <img
-    //                    src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${hero.SteamID}/header.jpg`}
-    //                    onError={(e) => { e.target.src = '/assets/react.svg'; }}
-    //                    alt="Game Header"
-    //                />
-
-    //                {hero.name}
-    //            </li>
-    //        )}
-    //    </ul>;
-
-    const contents = heroes.length === 0
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started.</em></p>
-        : <ul>
-            
-            {heroes.map(hero =>
-                <li key={hero.id}>
-                    
-                    {hero.name}
-                </li>
-            )}
-        </ul>;
-        {/*    {heroes.map(hero =>*/}
-        {/*        <li key={hero.id}>*/}
-        {/*            */}{/* Icon image */}
-        {/*            <img*/}
-        {/*                src={`https://media.steampowered.com/steamcommunity/public/images/apps/${hero.steamID}/${hero.imageIconHash}.jpg`}*/}
-        {/*                alt="icon"*/}
-        {/*            />*/}
-
-        {/*            */}{/* Header image with fallback */}
-        {/*            <img*/}
-        {/*                src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${hero.steamID}/header.jpg`}*/}
-        {/*                onError={(e) => {*/}
-        {/*                    console.log('Error loading header image:', e.target.src);*/}
-        {/*                }}*/}
-        {/*                alt="Game Header"*/}
-        {/*            />*/}
-
-        {/*            {hero.name}*/}
-        {/*        </li>*/}
-        {/*    )}*/}
-        {/*</ul>;*/}
-
-
     return (
-        <div>
-            <h1 class="text-3xl font-bold underline">Hero List</h1>
-            <p><Link to="/steam">Go to Steam Page</Link></p>
-            <p><Link to="/marvelrivals">Go to Marvel Rivals Page</Link></p>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
+        <div className="min-h-screen bg-[#0d1117] text-gray-200">
+            <Header />
+            <FadingImages />
+            <h1 className="text-3xl md:text-5xl font-bold text-yellow-400 text-center md:text-left mt-5 ml-10 mb-6 tracking-widest shadow-lg">
+                Not Sure What To Play?
+            </h1>
+
+
+            <div className="mt-8 lg:ml-14 flex flex-col md:flex-row items-center md:items-start">
+                <div className="text-lg text-white text-center md:text-left md:w-2/3">
+                    <p className="mt-4">
+                        Well then you're in luck! <span className="text-yellow-400 font-semibold">What Should I Play</span> is a web application that helps you decide what you wanna play!
+                    </p>
+                    <p className="mt-4">
+                        <span className="text-yellow-400 font-semibold">What Should I Play</span> uses Steam's Web API and a Marvel Rivals API to retrieve your stats: your most played games and heroes!
+                    </p>
+                    <p className="mt-4">
+                        Using this, you can see filters and parameters, and <span className="text-yellow-400 font-semibold">What Should I Play</span> will select a game, character, or a short list of either for you to choose!
+                    </p>
+                </div>
+
+                {/* Add logos here */}
+                <div className="mt-8 md:mt-0 md:w-1/3 flex justify-center md:justify-end">
+                    <img
+                        src="/marvelrivals.png"
+                        alt="Marvel Rivals Logo"
+                        className="h-24 md:h-32 mx-4"
+                    />
+                    <img
+                        src="/steamlogo.png"
+                        alt="Steam Logo"
+                        className="h-24 md:h-32 mx-4"
+                    />
+                </div>
+            </div>
+
+            {/* Moved Get Started section below */}
+            <div className="mt-14 text-center">
+                <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">Get Started</h2>
+                <p className="text-lg text-white mb-6">
+                    To get started, <Link to="/register" className="text-blue-500 hover:text-blue-400">register</Link> or <Link to="/login" className="text-blue-500 hover:text-blue-400">login</Link>. After that, navigate to either the Steam Games page or the Marvel Rivals page, and begin!
+                </p>
+                <Link
+                    to="/register"
+                    className="px-6 py-3 bg-yellow-500 text-white rounded-lg text-xl font-semibold hover:bg-yellow-400 transition"
+                >
+                    Get Started
+                </Link>
+            </div>
         </div>
     );
-
-    async function fetchAllHeroes() {
-        const response = await fetch('hero/mostPlayedHeroes/Zippodi');
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            setHeroes(data);
-        } else {
-            console.error('Failed to fetch heroes');
-        }
-    }
 }
 
 export default App;
