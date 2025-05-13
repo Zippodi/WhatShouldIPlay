@@ -18,8 +18,8 @@ function App() {
                     Not Sure What To Play?
                 </h1>
 
-                <div className="mt-6 lg:ml-14 flex flex-col md:flex-row items-center md:items-start mb-16 sm:mb-20" style={{ overflow: 'hidden' }}>
-                    <div className="text-base sm:text-lg text-white text-center md:text-left md:w-2/3 break-words">
+                <div className="mt-6 lg:ml-14 flex flex-col md:flex-row items-start md:items-stretch mb-16 sm:mb-20">
+                    <div className="text-base sm:text-lg text-white text-center md:text-left md:w-2/3 break-words mb-6 md:mb-0">
                         <p className="mt-4">
                             Well then you're in luck! <span className="text-yellow-400 font-semibold">What Should I Play</span> is a web application that helps you decide what you wanna play!
                         </p>
@@ -31,11 +31,11 @@ function App() {
                         </p>
                     </div>
 
-                    <div className="mt-6 md:mt-0 md:w-1/3 flex justify-center md:justify-end gap-4 sm:gap-6 items-center">
+                    <div className="mt-6 md:mt-0 md:w-1/3 flex flex-row md:flex-col justify-center md:items-end gap-4 sm:gap-6">
                         <img
                             src="/marvelrivals.png"
                             alt="Marvel Rivals Logo"
-                            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain"
+                            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain mb-0 md:mb-6"
                         />
                         <img
                             src="/steamlogo.png"
