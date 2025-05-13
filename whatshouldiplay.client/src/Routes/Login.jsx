@@ -11,7 +11,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`user/currentuser/${encodeURIComponent(username)}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE}/user/currentuser/${encodeURIComponent(username)}`);
 
             if (!response.ok) {
                 if (response.status === 404) {

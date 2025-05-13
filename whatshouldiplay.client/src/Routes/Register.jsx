@@ -20,7 +20,7 @@ function Register() {
         };
 
         try {
-            const response = await fetch('user/register', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE}/user/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
