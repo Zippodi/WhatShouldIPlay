@@ -26,18 +26,19 @@ function App() {
                 </div>
 
                 {/* Add logos here */}
-                <div className="mt-8 md:mt-0 md:w-1/3 flex justify-center md:justify-end">
+                <div className="mt-8 md:mt-0 md:w-1/3 flex justify-center md:justify-end gap-6 items-center">
                     <img
                         src="/marvelrivals.png"
                         alt="Marvel Rivals Logo"
-                        className="h-24 md:h-32 mx-4"
+                        className="h-20 md:h-24 lg:h-28 object-contain"
                     />
                     <img
                         src="/steamlogo.png"
                         alt="Steam Logo"
-                        className="h-24 md:h-32 mx-4"
+                        className="h-20 md:h-24 lg:h-28 object-contain"
                     />
                 </div>
+
             </div>
 
             {/* Moved Get Started section below */}
