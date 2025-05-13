@@ -4,7 +4,7 @@ import Header from './Components/Header';
 import FadingImages from './Components/FadingImages';
 function App() {
     return (
-        <div className="min-h-screen bg-[#0d1117] text-gray-200">
+        <div className="flex flex-col min-h-screen bg-[#0d1117] text-gray-200">
             <Header />
             <FadingImages />
             <h1 className="text-3xl md:text-5xl font-bold text-yellow-400 text-center md:text-left mt-5 ml-10 mb-6 tracking-widest shadow-lg">
