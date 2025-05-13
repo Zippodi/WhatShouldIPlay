@@ -4,24 +4,40 @@ import '../App.css';
 
 function Login() {
     const [username, setUsername] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = { username };
-        localStorage.setItem("wsip_user", JSON.stringify(user));
-        console.log("Registered and stored in localStorage:", user);
-        navigate("/");
-    };
 
+        try {
+            const response = await fetch(`user/currentuser/${encodeURIComponent(username)}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    setError("User not found.");
+                } else {
+                    setError("Something went wrong. Please try again.");
+                }
+                return;
+            }
+
+            const user = await response.json();
+            localStorage.setItem("wsip_user", JSON.stringify(user));
+            console.log("User fetched and stored in localStorage:", user);
+            navigate("/");
+        } catch (err) {
+            console.error("Login error:", err);
+            setError("Could not connect to the server.");
+        }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4">
             <div className="bg-gray-800 p-8 rounded-2xl shadow max-w-md w-full">
                 <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
                 <form onSubmit={handleSubmit}>
-                    <label htmlFor="username" className="block text-sm font-meidum text-gray-300 mb-2">
+                    <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                         Username
                     </label>
                     <input
@@ -33,6 +49,9 @@ function Login() {
                         placeholder="Enter your username"
                         required
                     />
+                    {error && (
+                        <p className="text-red-500 text-sm mt-2">{error}</p>
+                    )}
                     <button
                         type="submit"
                         className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-2xl shadow"
@@ -43,8 +62,6 @@ function Login() {
             </div>
         </div>
     );
-
-
 }
 
 export default Login;
