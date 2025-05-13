@@ -18,7 +18,7 @@ function App() {
                     Not Sure What To Play?
                 </h1>
 
-                <div className="mt-6 lg:ml-14 flex flex-col md:flex-row items-center md:items-start mb-8 sm:mb-10">
+                <div className="mt-6 lg:ml-14 flex flex-col md:flex-row items-center md:items-start mb-16 sm:mb-20" style={{ overflow: 'hidden' }}>
                     <div className="text-base sm:text-lg text-white text-center md:text-left md:w-2/3 break-words">
                         <p className="mt-4">
                             Well then you're in luck! <span className="text-yellow-400 font-semibold">What Should I Play</span> is a web application that helps you decide what you wanna play!
@@ -31,16 +31,16 @@ function App() {
                         </p>
                     </div>
 
-                    <div className="mt-6 md:mt-0 md:w-1/3 flex justify-center md:justify-end gap-4 sm:gap-6 items-center max-h-28 sm:max-h-32 md:max-h-36">
+                    <div className="mt-6 md:mt-0 md:w-1/3 flex justify-center md:justify-end gap-4 sm:gap-6 items-center">
                         <img
                             src="/marvelrivals.png"
                             alt="Marvel Rivals Logo"
-                            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain max-h-full"
+                            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain"
                         />
                         <img
                             src="/steamlogo.png"
                             alt="Steam Logo"
-                            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain max-h-full"
+                            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain"
                         />
                     </div>
                 </div>
