@@ -74,7 +74,7 @@ namespace WhatShouldIPlay.Server.Controllers
                     if (string.IsNullOrEmpty(appId))
                         continue;
 
-                    await Task.Delay(150); // Be nice to Steam!
+                    await Task.Delay(250); // Be nice to Steam!
 
                     var gameDetailsResponse = await client.GetAsync($"https://store.steampowered.com/api/appdetails?appids={appId}&cc=us&l=en");
                     string detailsJson = await gameDetailsResponse.Content.ReadAsStringAsync();
