@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import '../App.css';
 import Header from '../Components/Header';
 import ChosenHero from '../Components/ChosenHero';
