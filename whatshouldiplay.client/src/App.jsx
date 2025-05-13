@@ -1,9 +1,19 @@
 import { Link } from 'react-router';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Header from './Components/Header';
 import FadingImages from './Components/FadingImages';
 
 function App() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("wsip_user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
     return (
         <div className="flex flex-col min-h-screen bg-[#0d1117] text-gray-200 overflow-y-auto">
             <Header />
@@ -47,15 +57,38 @@ function App() {
 
                 <div className="mt-8 sm:mt-10 md:mt-14 text-center">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white mb-4">Get Started</h2>
-                    <p className="text-base sm:text-lg text-white mb-4 sm:mb-6 break-words">
-                        To get started, <Link to="/register" className="text-blue-500 hover:text-blue-400">register</Link> or <Link to="/login" className="text-blue-500 hover:text-blue-400">login</Link>. After that, navigate to either the Steam Games page or the Marvel Rivals page, and begin!
-                    </p>
-                    <Link
-                        to="/register"
-                        className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-white rounded-lg text-lg sm:text-xl font-semibold hover:bg-yellow-400 transition"
-                    >
-                        Get Started
-                    </Link>
+                    {user ? (
+                        <p className="text-base sm:text-lg text-white mb-4 sm:mb-6 break-words">
+                            To get started, <Link to="/steam" className="text-blue-500 hover:text-blue-400">go to Steam Games</Link> or <Link to="/marvelrivals" className="text-blue-500 hover:text-blue-400">go to Marvel Rivals</Link>. Begin exploring now!
+                        </p>
+                    ) : (
+                        <p className="text-base sm:text-lg text-white mb-4 sm:mb-6 break-words">
+                            To get started, <Link to="/register" className="text-blue-500 hover:text-blue-400">register</Link> or <Link to="/login" className="text-blue-500 hover:text-blue-400">login</Link>. After that, navigate to either the Steam Games page or the Marvel Rivals page, and begin!
+                        </p>
+                    )}
+                    {user ? (
+                        <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+                            <Link
+                                to="/steam"
+                                className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-white rounded-lg text-lg sm:text-xl font-semibold hover:bg-yellow-400 transition"
+                            >
+                                Steam Games
+                            </Link>
+                            <Link
+                                to="/marvelrivals"
+                                className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-white rounded-lg text-lg sm:text-xl font-semibold hover:bg-yellow-400 transition"
+                            >
+                                Marvel Rivals
+                            </Link>
+                        </div>
+                    ) : (
+                        <Link
+                            to="/register"
+                            className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-white rounded-lg text-lg sm:text-xl font-semibold hover:bg-yellow-400 transition"
+                        >
+                            Get Started
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>
