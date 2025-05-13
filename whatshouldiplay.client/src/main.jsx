@@ -9,6 +9,7 @@ import Login from './Routes/Login'
 import App from './App.jsx'
 import Steam from './Routes/Steam';
 import MarvelRivals from './Routes/MarvelRivals';
+import EditProfile from './Routes/EditProfile';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
                 <Route path="/marvelrivals" element={<MarvelRivals />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
+                <Route path="editprofile" element={<EditProfile />} />
             </Routes>
         </BrowserRouter>
   </StrictMode>,
