@@ -5,8 +5,7 @@ import FadingImages from './Components/FadingImages';
 
 function App() {
     return (
-        <div className="flex flex-col min-h-screen bg-[#0d1117] text-gray-200">
-            <Header />
+        <div className="flex flex-col min-h-screen bg-[#0d1117] text-gray-200 overflow-y-auto">            <Header />
             <FadingImages />
 
             <div className="container mx-auto px-4">
