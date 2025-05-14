@@ -59,6 +59,13 @@ namespace WhatShouldIPlay.Server.Controllers
             return CreatedAtAction(nameof(GetCurrentUser), new { username = newUser.Username }, newUser);
         }
 
+
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            return Ok("Backend is alive and CORS is working!");
+        }
+
         //Updates the User with the steamID
         [HttpPut("addSteam")]
         public async Task<IActionResult> AddSteamID([FromBody] UserModel newUser)

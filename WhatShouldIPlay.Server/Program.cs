@@ -13,16 +13,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-//var apiKey = builder.Configuration["ApiSettings:ApiKey"];
-//var steamApiKey = builder.Configuration["ApiSettings:SteamApiKey"];
-//builder.Services.AddSingleton(apiKey);
-//builder.Services.AddSingleton(steamApiKey);
+// var apiKey = builder.Configuration["ApiSettings:ApiKey"];
+// var steamApiKey = builder.Configuration["ApiSettings:SteamApiKey"];
+// builder.Services.AddSingleton(apiKey);
+// builder.Services.AddSingleton(steamApiKey);
 var apiSettings = builder.Configuration.GetSection("ApiSettings")
     .Get<Dictionary<string, string>>();
 
 builder.Services.AddSingleton(apiSettings);
-
-
 
 // Add services to the container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -36,17 +34,18 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+app.UseCors("AllowAll");
 
+
+// Use static files (if serving a frontend SPA like React)
+app.UseStaticFiles();
 app.UseDefaultFiles();
-app.MapStaticAssets();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseCors("AllowAll");
 
 
 app.UseHttpsRedirection();
