@@ -11,7 +11,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/currentuser/${encodeURIComponent(username)}`);
+            const response = await fetch(`https://whatshouldiplayserver20250513213811-abb0gfhdeqhhdebd.canadacentral-01.azurewebsites.net/user/currentuser/${encodeURIComponent(username)}`);
 
             if (!response.ok) {
                 if (response.status === 404) {

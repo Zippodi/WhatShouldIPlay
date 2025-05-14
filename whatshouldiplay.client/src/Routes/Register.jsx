@@ -20,7 +20,7 @@ function Register() {
         };
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/user/register`, {
+            const response = await fetch(`https://whatshouldiplayserver20250513213811-abb0gfhdeqhhdebd.canadacentral-01.azurewebsites.net/user/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
