@@ -22,7 +22,7 @@ export default function MarvelRivals() {
             setLoading(false);
             setChosenHero({
                 name: "Spider-Man",
-                image: "sm.png",
+                image: "wintersolider.jpeg",
             });
 
             // Play confetti sound effect
