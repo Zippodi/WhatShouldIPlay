@@ -45,7 +45,13 @@ export default function MarvelRivals() {
         try {
             const response = await fetch(`${baseUrl}${endpoint}`);
             if (!response.ok) throw new Error("Failed to fetch heroes");
-            const heroes = await response.json();
+            let heroes = await response.json();
+
+            // Ensure playstylesArray is used for filtering
+            heroes = heroes.map(hero => ({
+                ...hero,
+                playstylesArray: hero.playstylesArray || hero.playstyles.split(',').map(style => style.trim())
+            }));
 
             // Filter by role
             let filteredHeroes = heroes;
@@ -53,10 +59,10 @@ export default function MarvelRivals() {
                 filteredHeroes = filteredHeroes.filter(hero => hero.role.toLowerCase() === role.toLowerCase());
             }
 
-            // Filter by playstyles (at least one match)
+            // Filter by playstyles (all selected playstyles must match)
             if (playstyles.length > 0) {
                 filteredHeroes = filteredHeroes.filter(hero =>
-                    playstyles.some(style => hero.playstyles.includes(style))
+                    playstyles.every(style => hero.playstylesArray.includes(style))
                 );
             }
 
@@ -69,10 +75,10 @@ export default function MarvelRivals() {
             // Pick a random hero from filtered list
             const randomHero = filteredHeroes[Math.floor(Math.random() * filteredHeroes.length)];
 
-            // Use hardcoded image for now
+            // Use API-provided imageId
             setChosenHero({
                 name: randomHero.name,
-                image: "wintersoldier.webp",
+                imageId: randomHero.imageId || "wintersoldier.webp",
             });
 
             // Play confetti sound effect
@@ -90,6 +96,38 @@ export default function MarvelRivals() {
         }
     };
 
+    const fetchWolverine = async () => {
+        setLoading(true);
+        setChosenHero(null);
+        setErrorMessage(null);
+
+        const baseUrl = "https://whatshouldiplayserver20250513213811-abb0gfhdeqhhdebd.canadacentral-01.azurewebsites.net";
+        const endpoint = '/hero/Wolverine';
+
+        try {
+            const response = await fetch(`${baseUrl}${endpoint}`);
+            if (!response.ok) throw new Error("Failed to fetch Wolverine");
+            const wolverine = await response.json();
+
+            // Set Wolverine as the chosen hero
+            setChosenHero({
+                name: wolverine.name,
+                imageId: wolverine.imageId || "wintersoldier.webp",
+            });
+
+            // Play both wolverine and confetti sound effects
+            wolverineAudio.current.currentTime = 0;
+            wolverineAudio.current.play();
+            confettiAudio.current.currentTime = 0;
+            confettiAudio.current.play();
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong while fetching Wolverine.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchHeroes();
@@ -101,8 +139,7 @@ export default function MarvelRivals() {
     };
 
     const handleWolverineClick = () => {
-        wolverineAudio.current.currentTime = 0;
-        wolverineAudio.current.play();
+        fetchWolverine();
     };
 
     return (
@@ -119,7 +156,7 @@ export default function MarvelRivals() {
                         </div>
                     ) : chosenHero ? (
                         <>
-                            <ChosenHero name={chosenHero.name} imageId={chosenHero.image} />
+                            <ChosenHero name={chosenHero.name} imageId={chosenHero.imageId} />
                             {errorMessage && (
                                 <p className="text-red-500 text-center mt-4">{errorMessage}</p>
                             )}
