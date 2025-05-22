@@ -16,20 +16,60 @@ export default function MarvelRivals() {
     const wolverineAudio = useRef(new Audio("/wolverine_claw.mp3"));
     const confettiAudio = useRef(new Audio("/Confetti.mp3"));
 
-    const fetchHeroes = () => {
+    const fetchHeroes = async () => {
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
+        setChosenHero(null);
+
+        const username = "someUsername"; // Replace this with your actual logic for getting the username
+        const baseUrl = "https://whatshouldiplayserver20250513213811-abb0gfhdeqhhdebd.canadacentral-01.azurewebsites.net";
+        const endpoint = season === "all"
+            ? `/hero/mostPlayedHeroes/${encodeURIComponent(username)}`
+            : `/hero/mostPlayedHeroes/${encodeURIComponent(username)}/${season}`;
+
+        try {
+            const response = await fetch(`${baseUrl}${endpoint}`);
+            if (!response.ok) throw new Error("Failed to fetch heroes");
+            const heroes = await response.json();
+
+            // Filter by role
+            let filteredHeroes = heroes;
+            if (role) {
+                filteredHeroes = filteredHeroes.filter(hero => hero.role.toLowerCase() === role.toLowerCase());
+            }
+
+            // Filter by playstyles (at least one match)
+            if (playstyles.length > 0) {
+                filteredHeroes = filteredHeroes.filter(hero =>
+                    playstyles.some(style => hero.playstyles.includes(style))
+                );
+            }
+
+            if (filteredHeroes.length === 0) {
+                alert("No heroes found with those filters.");
+                setLoading(false);
+                return;
+            }
+
+            // Pick a random hero from filtered list
+            const randomHero = filteredHeroes[Math.floor(Math.random() * filteredHeroes.length)];
+
+            // Use hardcoded image for now
             setChosenHero({
-                name: "Spider-Man",
+                name: randomHero.name,
                 image: "wintersoldier.webp",
             });
 
             // Play confetti sound effect
             confettiAudio.current.currentTime = 0;
             confettiAudio.current.play();
-        }, 2000);
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong while fetching heroes.");
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -59,7 +99,7 @@ export default function MarvelRivals() {
                         </div>
                     ) : chosenHero ? (
                         <>
-                            <ChosenHero name={chosenHero.name} image={chosenHero.image} />
+                            <ChosenHero name={chosenHero.name} imageId={chosenHero.imageId} />
                             <div className="mt-6 text-center">
                                 <button
                                     onClick={handleTryAgain}
@@ -71,7 +111,6 @@ export default function MarvelRivals() {
                         </>
                     ) : (
                         <form onSubmit={handleSubmit}>
-                            {/* Season Selection */}
                             <div className="mb-4">
                                 <label htmlFor="season" className="block text-sm font-medium text-gray-300 mb-2">
                                     Select Season
@@ -88,7 +127,6 @@ export default function MarvelRivals() {
                                 </select>
                             </div>
 
-                            {/* Playstyle Selection */}
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Select Playstyles</label>
                                 <div className="flex flex-wrap space-x-4">
@@ -112,7 +150,6 @@ export default function MarvelRivals() {
                                 </div>
                             </div>
 
-                            {/* Role Selection */}
                             <div className="mb-4">
                                 <label htmlFor="role" className="block text-sm font-medium text-gray-300 mb-2">
                                     Select Role
@@ -130,7 +167,6 @@ export default function MarvelRivals() {
                                 </select>
                             </div>
 
-                            {/* WOLVERINE! Button */}
                             <div className="mt-6 text-center">
                                 <button
                                     type="button"
@@ -141,7 +177,6 @@ export default function MarvelRivals() {
                                 </button>
                             </div>
 
-                            {/* Pick My Hero Button */}
                             <div className="mt-6 text-center">
                                 <button
                                     type="submit"
