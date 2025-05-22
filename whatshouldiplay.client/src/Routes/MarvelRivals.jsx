@@ -13,6 +13,8 @@ export default function MarvelRivals() {
     const [chosenHero, setChosenHero] = useState(null);
     const [width, height] = useWindowSize();
     const [user, setUser] = useState(null);
+    const [useStats, setUseStats] = useState(true);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
         const storedUser = localStorage.getItem("wsip_user");
@@ -27,12 +29,18 @@ export default function MarvelRivals() {
     const fetchHeroes = async () => {
         setLoading(true);
         setChosenHero(null);
+        setErrorMessage(null);
 
-        const username = user.marvelRivalsUsername;
         const baseUrl = "https://whatshouldiplayserver20250513213811-abb0gfhdeqhhdebd.canadacentral-01.azurewebsites.net";
-        const endpoint = season === "all"
-            ? `/hero/mostPlayedHeroes/${encodeURIComponent(username)}`
-            : `/hero/mostPlayedHeroes/${encodeURIComponent(username)}/${season}`;
+        let endpoint;
+
+        if (useStats && user?.marvelRivalsUsername) {
+            endpoint = season === "all"
+                ? `/hero/mostPlayedHeroes/${encodeURIComponent(user.marvelRivalsUsername)}`
+                : `/hero/mostPlayedHeroes/${encodeURIComponent(user.marvelRivalsUsername)}/${season}`;
+        } else {
+            endpoint = '/hero';
+        }
 
         try {
             const response = await fetch(`${baseUrl}${endpoint}`);
@@ -72,12 +80,15 @@ export default function MarvelRivals() {
             confettiAudio.current.play();
         } catch (error) {
             console.error(error);
-            alert("Something went wrong while fetching heroes.");
+            if (useStats) {
+                setErrorMessage("Failed to fetch stats, try not using them.");
+            } else {
+                alert("Something went wrong while fetching heroes.");
+            }
         } finally {
             setLoading(false);
         }
     };
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -86,6 +97,7 @@ export default function MarvelRivals() {
 
     const handleTryAgain = () => {
         setChosenHero(null);
+        setErrorMessage(null);
     };
 
     const handleWolverineClick = () => {
@@ -107,7 +119,10 @@ export default function MarvelRivals() {
                         </div>
                     ) : chosenHero ? (
                         <>
-                            <ChosenHero name={chosenHero.name} imageId={chosenHero.imageId} />
+                            <ChosenHero name={chosenHero.name} imageId={chosenHero.image} />
+                            {errorMessage && (
+                                <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+                            )}
                             <div className="mt-6 text-center">
                                 <button
                                     onClick={handleTryAgain}
@@ -120,6 +135,21 @@ export default function MarvelRivals() {
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    Use Player Statistics
+                                </label>
+                                <label className="inline-flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={useStats}
+                                        onChange={(e) => setUseStats(e.target.checked)}
+                                        className="form-checkbox text-blue-500"
+                                    />
+                                    <span className="ml-2">Use my stats</span>
+                                </label>
+                            </div>
+
+                            <div className="mb-4">
                                 <label htmlFor="season" className="block text-sm font-medium text-gray-300 mb-2">
                                     Select Season
                                 </label>
@@ -128,6 +158,7 @@ export default function MarvelRivals() {
                                     value={season}
                                     onChange={(e) => setSeason(e.target.value)}
                                     className="w-full px-4 py-2 rounded-xl bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    disabled={!useStats}
                                 >
                                     <option value="all">All Seasons</option>
                                     <option value="1">Season 1</option>
@@ -174,6 +205,10 @@ export default function MarvelRivals() {
                                     <option value="strategist">Strategist</option>
                                 </select>
                             </div>
+
+                            {errorMessage && (
+                                <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+                            )}
 
                             <div className="mt-6 text-center">
                                 <button
