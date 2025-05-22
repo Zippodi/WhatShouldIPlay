@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import '../App.css';
 import Header from '../Components/Header';
 import ChosenHero from '../Components/ChosenHero';
@@ -12,6 +12,14 @@ export default function MarvelRivals() {
     const [loading, setLoading] = useState(false);
     const [chosenHero, setChosenHero] = useState(null);
     const [width, height] = useWindowSize();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("wsip_user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
     const wolverineAudio = useRef(new Audio("/wolverine_claw.mp3"));
     const confettiAudio = useRef(new Audio("/Confetti.mp3"));
@@ -20,7 +28,7 @@ export default function MarvelRivals() {
         setLoading(true);
         setChosenHero(null);
 
-        const username = "someUsername"; // Replace this with your actual logic for getting the username
+        const username = user.marvelRivalsUsername;
         const baseUrl = "https://whatshouldiplayserver20250513213811-abb0gfhdeqhhdebd.canadacentral-01.azurewebsites.net";
         const endpoint = season === "all"
             ? `/hero/mostPlayedHeroes/${encodeURIComponent(username)}`
